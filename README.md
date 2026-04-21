@@ -45,26 +45,27 @@
 
 ### Environment Variables
 
-Salin dan sesuaikan file `.env`:
+Salin `.env.example` lalu sesuaikan nilainya:
 
-```env
-APP_PORT=8080
-GIN_MODE=release
-
-JWT_SECRET=your-super-secret-key
-JWT_REFRESH_SECRET=your-refresh-secret-key
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=catalogue
-DB_SSLMODE=disable
-
-REDIS_ADDR=127.0.0.1:6379
-REDIS_PASSWORD=
-REDIS_DB=0
+```bash
+cp .env.example .env
 ```
+
+| Variable           | Description                        | Default       |
+|--------------------|------------------------------------|---------------|
+| APP_PORT           | Port server                        | 8080          |
+| GIN_MODE           | `debug` atau `release`             | release       |
+| JWT_SECRET         | Secret key untuk access token      | -             |
+| JWT_REFRESH_SECRET | Secret key untuk refresh token     | -             |
+| DB_HOST            | PostgreSQL host                    | localhost     |
+| DB_PORT            | PostgreSQL port                    | 5432          |
+| DB_USER            | PostgreSQL user                    | postgres      |
+| DB_PASSWORD        | PostgreSQL password                | -             |
+| DB_NAME            | Nama database                      | catalogue     |
+| DB_SSLMODE         | SSL mode (`disable`/`require`)     | disable       |
+| REDIS_ADDR         | Redis address `host:port`          | 127.0.0.1:6379|
+| REDIS_PASSWORD     | Redis password (kosongkan jika tidak ada) | -      |
+| REDIS_DB           | Redis database index               | 0             |
 
 ### Run with Docker Compose
 
@@ -82,18 +83,27 @@ docker compose down
 ### Run Locally
 
 ```bash
-# Install dependencies
+# 1. Clone repo
+git clone https://github.com/chillman2101/gits-catalogue.git
+cd gits-catalogue
+
+# 2. Copy dan isi environment variables
+cp .env.example .env
+
+# 3. Install dependencies
 make download
 
-# Run migration
+# 4. Jalankan migration (auto-create database + tabel)
 make migrate
 
-# (Optional) Seed data
+# 5. (Opsional) Seed data awal
 make seed
 
-# Start server
+# 6. Start server
 make server
 ```
+
+Server berjalan di `http://localhost:8080`
 
 ## API Endpoints
 
@@ -176,19 +186,32 @@ Validation errors return:
 }
 ```
 
-## Swagger Docs
+## API Documentation
 
-After starting the server, open:
+### Swagger
+
+Setelah server berjalan, buka di browser:
 
 ```
 http://localhost:8080/swagger/index.html
 ```
 
-To regenerate docs after code changes:
+Swagger menyediakan dokumentasi interaktif untuk semua endpoint — bisa langsung coba request dari browser.
+
+Untuk regenerate docs setelah ada perubahan kode:
 
 ```bash
 make swag
 ```
+
+### Postman
+
+Import file Swagger ke Postman:
+1. Buka Postman → **Import**
+2. Pilih **URL** → masukkan `http://localhost:8080/swagger/doc.json`
+3. Postman akan generate semua collection secara otomatis
+
+Atau download file JSON-nya langsung: `http://localhost:8080/swagger/doc.json`
 
 ## Testing
 

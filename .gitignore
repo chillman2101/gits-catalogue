@@ -1,0 +1,7 @@
+.env
+.claude/
+bin/
+tmp/
+*.exe
+*.test
+*.out

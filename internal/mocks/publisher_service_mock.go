@@ -1,0 +1,39 @@
+package mocks
+
+import (
+	"github.com/chillman2101/gits-catalogue/internal/model"
+	"github.com/chillman2101/gits-catalogue/internal/query"
+	"github.com/stretchr/testify/mock"
+)
+
+type MockPublisherService struct {
+	mock.Mock
+}
+
+func (m *MockPublisherService) GetAll(p query.Params) ([]model.Publisher, int64, error) {
+	args := m.Called(p)
+	return args.Get(0).([]model.Publisher), args.Get(1).(int64), args.Error(2)
+}
+
+func (m *MockPublisherService) GetByID(id uint) (*model.Publisher, error) {
+	args := m.Called(id)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*model.Publisher), args.Error(1)
+}
+
+func (m *MockPublisherService) Create(publisher *model.Publisher) error {
+	args := m.Called(publisher)
+	return args.Error(0)
+}
+
+func (m *MockPublisherService) Update(id uint, publisher *model.Publisher) error {
+	args := m.Called(id, publisher)
+	return args.Error(0)
+}
+
+func (m *MockPublisherService) Delete(id uint) error {
+	args := m.Called(id)
+	return args.Error(0)
+}
